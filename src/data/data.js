@@ -18,6 +18,13 @@ export const PhoneBook = [
       name: 'Jarek Contreras',
       phoneNumer: '722789654',
       date: '2019-05-30T19:20:14.298Z',
+      important: false,
+    },
+    {
+      id: 4,
+      name: 'Evelyn Laguna',
+      phoneNumer: '722440032',
+      date: '2019-05-30T19:20:14.298Z',
       important: true,
     },
 ]
