@@ -1,33 +1,69 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Book } from "./components/Book/Book";
+import { Button } from "./components/Button/Button";
+import { Form } from "./components/Form/Form";
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = (props) => {
 
+  const [phoneBook, setPhoneBook] = useState(props.phoneBook);
+  const [valueInput, setValueInput] = useState('') 
+  const [phoneVallue, setPhoneValue] = useState('') 
+  const [filterBook, setFilterBook] = useState(true)
+
+  const handleFilter = () => {
+    setFilterBook( () => !filterBook )
+  }
+
+  const sendData = (event) => {
+
+    event.preventDefault()
+
+    const newData = {
+      id: phoneBook.length + 1 ,
+      name: valueInput,
+      phoneNumer:  phoneVallue,
+      date: new Date().toISOString(),
+      important: Math.random() < 0.5 ,
+    }
+
+    setPhoneBook([...phoneBook, newData])
+    setValueInput('')
+    setPhoneValue('')
+  }
+
+  const handleValueInput = (event) => {
+    const addNewNote = event.target.value;
+    setValueInput(addNewNote)
+  }
+
+  const handlePhoneValue = (event) => {
+    const newPhoneValue = event.target.value;
+    setPhoneValue(newPhoneValue)
+  }
+
+  const textButtonImportant = filterBook ? 'Contactos importantes' :  'Todas los contactos';
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Phone Book</h1>
+
+       <Form handleSubmit={sendData} valueInput={handleValueInput} valueToSendName={valueInput} phoneValue={handlePhoneValue} valueToSenPhone={phoneVallue}  />
+
+        <Button 
+          handleEventClick={handleFilter}
+          textValue={textButtonImportant}
+        />
+      {
+        phoneBook
+        .filter( (item) =>{
+          if (filterBook === true) return true 
+          return item.important === true 
+        } )
+        .map( item => (
+          <Book key={item.id} {...item} />
+        ) )
+      }
     </>
   )
 }
